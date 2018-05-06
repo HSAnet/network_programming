@@ -28,10 +28,10 @@
 #define TTL_MAX 30
 #define RETRIES_MAX 3
 
-void 
+void
 usage();
 
-int 
+int
 main(int argc, char *argv[])
 {
 
@@ -40,9 +40,13 @@ main(int argc, char *argv[])
 	}
 
 	struct addrinfo hints;
+
 	memset(&hints, 0, sizeof(hints));
+
 	hints.ai_flags = AI_NUMERICSERV | AI_ADDRCONFIG;
+
 	hints.ai_family = AF_INET;     //we only use a single IP version here to keep the code simple... should be v6 really
+
 	hints.ai_socktype = SOCK_DGRAM;
 
 	struct addrinfo *lookup;
@@ -74,6 +78,7 @@ main(int argc, char *argv[])
 	}
 
 	int on = 1;
+
 	if(setsockopt(sockfd, IPPROTO_IP, IP_RECVERR, &on, sizeof(on))) {
 		perror("Unable to set socket option");
 		exit(EXIT_FAILURE);
@@ -81,7 +86,7 @@ main(int argc, char *argv[])
 
 	char addr_str[INET_ADDRSTRLEN];
 
-	if(inet_ntop(peer->ai_family, &((struct sockaddr_in*)(peer->ai_addr))->sin_addr, addr_str, INET_ADDRSTRLEN) == NULL) {
+	if(inet_ntop(peer->ai_family, &((struct sockaddr_in *)(peer->ai_addr))->sin_addr, addr_str, INET_ADDRSTRLEN) == NULL) {
 		perror("Unable to create a string from the resolved IP address\n");
 		exit(EXIT_FAILURE);
 	}
@@ -149,7 +154,7 @@ main(int argc, char *argv[])
 	recv_msg.msg_namelen = sizeof(src_addr);
 
 	recv_msg.msg_iov = recv_iov;
-	recv_msg.msg_iovlen=1;
+	recv_msg.msg_iovlen = 1;
 
 	recv_msg.msg_control = ctrl_buf;
 	recv_msg.msg_controllen = sizeof(ctrl_buf);
@@ -160,6 +165,7 @@ main(int argc, char *argv[])
 		if (sendmsg(sockfd, &send_msg, 0) < 0) {
 			(*ttl_ptr)--;
 			retries++;
+
 			if(retries >= RETRIES_MAX) {
 				fprintf(stderr, "Writing socket failed on ttl %d\n", (*ttl_ptr) + 1);
 				perror("Writing socket failed");
@@ -171,6 +177,7 @@ main(int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		} else if (ret > 0) {
 			printf("ICMP packet received at TTL %d\n", *ttl_ptr);
+
 			//there is only a single fd, so no need to look for the right one
 			if(recvmsg(sockfd, &recv_msg, MSG_ERRQUEUE) < 0) {
 				perror("recvmsg failed");
@@ -184,7 +191,7 @@ main(int argc, char *argv[])
 
 			for(recv_cmsg = CMSG_FIRSTHDR(&recv_msg); recv_cmsg != NULL; recv_cmsg = CMSG_NXTHDR(&recv_msg, recv_cmsg)) {
 				if(recv_cmsg->cmsg_level == IPPROTO_IP && recv_cmsg->cmsg_type == IP_RECVERR) {
-					struct sock_extended_err *ee = (struct sock_extended_err*)CMSG_DATA(recv_cmsg);
+					struct sock_extended_err *ee = (struct sock_extended_err *)CMSG_DATA(recv_cmsg);
 
 					if(ee->ee_origin == SO_EE_ORIGIN_ICMP && ee->ee_type == ICMP_TIME_EXCEEDED) {
 						printf("ICMP time exceeded received\n");
@@ -209,10 +216,11 @@ main(int argc, char *argv[])
 	return EXIT_SUCCESS;
 }
 
-void 
+void
 usage()
 {
 
-	printf("Usage:\n\t06 [DNS name]\n");
+	printf("Usage:\n\t06.out [DNS name]\n\n\
+A (trivial) traceroute implementation\n\n");
 	exit(EXIT_FAILURE);
 }

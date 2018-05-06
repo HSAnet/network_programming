@@ -51,24 +51,28 @@ main(int argc, char *argv[])
 	}
 
 	struct addrinfo *tmp;
+
 	char addr_str[INET6_ADDRSTRLEN];
+
 	uint16_t port = 0;
 
 	for(tmp = lookup; tmp != NULL; tmp = tmp->ai_next) {
 		printf("---- Returned by getaddrinfo: ----\n");
 
 		if(tmp->ai_family == AF_INET) {
-			if(inet_ntop(AF_INET, &((struct sockaddr_in*)(tmp->ai_addr))->sin_addr,
+			if(inet_ntop(AF_INET, &((struct sockaddr_in *)(tmp->ai_addr))->sin_addr,
 			             addr_str, INET6_ADDRSTRLEN) == NULL) {
 				continue;
 			}
-			port = ntohs(((struct sockaddr_in*)(tmp->ai_addr))->sin_port);
+
+			port = ntohs(((struct sockaddr_in *)(tmp->ai_addr))->sin_port);
 		} else if(tmp->ai_family == AF_INET6) {
-			if(inet_ntop(AF_INET6, &((struct sockaddr_in6*)(tmp->ai_addr))->sin6_addr,
+			if(inet_ntop(AF_INET6, &((struct sockaddr_in6 *)(tmp->ai_addr))->sin6_addr,
 			             addr_str, INET6_ADDRSTRLEN) == NULL) {
 				continue;
 			}
-			port = ntohs(((struct sockaddr_in6*)(tmp->ai_addr))->sin6_port);
+
+			port = ntohs(((struct sockaddr_in6 *)(tmp->ai_addr))->sin6_port);
 		} else {
 			printf("\tUnsupported address family\n");
 			continue;
@@ -100,7 +104,7 @@ void
 usage ()
 {
 
-	printf("Usage:\n\t02 [DNS name]\n\n\
-	A (trivial) program to resolve DNS names");
+	printf("Usage:\n\t02.out [DNS name]\n\n\
+A (trivial) program to resolve DNS names\n\n");
 	exit(EXIT_FAILURE);
 }

@@ -9,7 +9,9 @@ all: 06.out
 	$(COMPILER) $(FLAGS) -o 06.out 06_traceroute.c
 
 style:
-	astyle --style=linux --indent=tab 06_traceroute.c
+	astyle --style=linux --indent=tab --break-blocks --pad-oper \
+	--align-pointer=name --align-reference=name \
+	06_traceroute.c
 
 clean: 
-	rm 06.out
+	rm *.out *.orig

@@ -7,7 +7,7 @@
  *
  * Once your program runs and waits for input, check whether you can already
  * obtain information about the socket using the ss tool.
-
+ *
  * Learning outcome:
  *    - Get familiar (again) with the tool chain
  *    - Create a first socket
@@ -24,7 +24,6 @@
 int
 main()
 {
-
 	int sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
 
 	if(sock_fd < 0) {

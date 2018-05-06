@@ -37,9 +37,13 @@ main(int argc, char *argv[])
 	}
 
 	struct addrinfo hints;
+
 	memset(&hints, 0, sizeof(hints));
+
 	hints.ai_flags = AI_NUMERICSERV | AI_ADDRCONFIG;
+
 	hints.ai_family = AF_UNSPEC;
+
 	hints.ai_socktype = SOCK_DGRAM;
 
 	struct addrinfo *lookup;
@@ -65,7 +69,7 @@ main(int argc, char *argv[])
 		}
 	}
 
-	if(sockfd <=0) {
+	if(sockfd <= 0) {
 		printf("Failed to create a socket.\n");
 		exit(EXIT_FAILURE);
 	}
@@ -76,10 +80,11 @@ main(int argc, char *argv[])
 
 	while(total_bytes_sent < strlen(payload)) {
 		if((bytes_sent = sendto(sockfd, payload + total_bytes_sent, bytes_remaining, 0,
-		                        (struct sockaddr*)(peer->ai_addr), peer->ai_addrlen)) < 0) {
+		                        (struct sockaddr *)(peer->ai_addr), peer->ai_addrlen)) < 0) {
 			perror("Writing to socket failed");
 			break;
 		}
+
 		total_bytes_sent += bytes_sent;
 		bytes_remaining -= bytes_sent;
 	}
@@ -97,6 +102,7 @@ void
 usage ()
 {
 
-	printf("Usage:\n\t03 [DNS name]\n");
+	printf("Usage:\n\t03.out [DNS name]\n\n\
+A (trivial) UDP echo client\n\n");
 	exit(EXIT_FAILURE);
 }
