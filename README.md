@@ -1,2 +1,2 @@
 # network_programming
-Network Programming Course
+Example programs from the HSA Network Programming course
