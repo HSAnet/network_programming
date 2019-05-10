@@ -95,18 +95,21 @@ main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	char *recv_buffer[RECV_BUFFER_SIZE];
+	char recv_buffer[RECV_BUFFER_SIZE];
 	memset(recv_buffer, 0, RECV_BUFFER_SIZE);
 	int bytes_received = 0;
 
-	if(recv(sock_fd, recv_buffer, RECV_BUFFER_SIZE, 0) < 0) {
+	if((bytes_received = recv(sock_fd, recv_buffer, RECV_BUFFER_SIZE, 0)) < 0) {
 		perror("recv failed");
 		close(sock_fd);
 		freeaddrinfo(lookup);
+		free(http_get);
 		exit(EXIT_FAILURE);
 	}
 
 	printf("%s", recv_buffer);
+
+	free(http_get);
 
 	freeaddrinfo(lookup);
 
