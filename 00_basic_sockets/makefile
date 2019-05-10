@@ -1,21 +1,24 @@
-FLAGS = -Wall -Werror
+FLAGS = -Wall
 COMPILER = clang
 
 .PHONY: all clean style
 
-all: 01.out 02.out 03.out 04.out
+all: 01 02 03 04 05
 
-01.out: 01_first_socket.c
-	$(COMPILER) $(FLAGS) -o 01.out 01_first_socket.c
+01: 01_first_socket.c
+	$(COMPILER) $(FLAGS) -o 01 01_first_socket.c
 
-02.out: 02_dns_resolution.c
-	$(COMPILER) $(FLAGS) -o 02.out 02_dns_resolution.c
+02: 02_dns_resolution.c
+	$(COMPILER) $(FLAGS) -o 02 02_dns_resolution.c
 
-03.out: 03_udp_echo_client.c
-	$(COMPILER) $(FLAGS) -o 03.out 03_udp_echo_client.c
+03: 03_udp_echo_client.c
+	$(COMPILER) $(FLAGS) -o 03 03_udp_echo_client.c
 
-04.out: 04_tcp_connect.c
-	$(COMPILER) $(FLAGS) -o 04.out 04_tcp_connect.c
+04: 04_tcp_connect.c
+	$(COMPILER) $(FLAGS) -o 04 04_tcp_connect.c
+
+05: 05_http_get.c
+	$(COMPILER) $(FLAGS) -o 05 05_http_get.c
 
 style:
 	astyle --style=linux --indent=tab --break-blocks --pad-oper \
@@ -23,7 +26,8 @@ style:
 	01_first_socket.c \
 	02_dns_resolution.c \
 	03_udp_echo_client.c \
-	04_tcp_connect.c
+	04_tcp_connect.c \
+	05_http_get.c
 
 clean: 
-	rm *.out *.orig
+	rm 01 02 03 04 05 *.orig

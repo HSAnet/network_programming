@@ -21,6 +21,8 @@
 #include <netinet/in.h>
 #include <netinet/ip.h>
 
+#define RECV_BUFFER_SIZE 2048
+
 void
 usage();
 
@@ -28,7 +30,7 @@ int
 main(int argc, char *argv[])
 {
 
-	if(argc != 3) {
+	if(argc != 2) {
 		usage();
 	}
 
@@ -44,7 +46,7 @@ main(int argc, char *argv[])
 
 	struct addrinfo *lookup;
 
-	if(getaddrinfo(argv[1], argv[2], NULL, &lookup)) {
+	if(getaddrinfo(argv[1], "80", NULL, &lookup)) {
 		perror("DNS lookup failed");
 		return(EXIT_FAILURE);
 	}
@@ -76,7 +78,35 @@ main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	getchar();
+	char http_get_stub[] = "GET / HTTP/1.1\r\nHost:";
+
+	int http_get_size = strlen(http_get_stub) + strlen(argv[1]) + 5;
+	char *http_get = malloc(http_get_size);
+	memset(http_get, 0, http_get_size);
+
+	strcpy(http_get, http_get_stub);
+	strcpy(http_get + strlen(http_get_stub), argv[1]);
+	strcpy(http_get + strlen(http_get_stub) + strlen(argv[1]), "\r\n\r\n");
+
+	if(send(sock_fd, http_get, http_get_size, 0) < 0) {
+		perror("send failed");
+		close(sock_fd);
+		freeaddrinfo(lookup);
+		exit(EXIT_FAILURE);
+	}
+
+	char *recv_buffer[RECV_BUFFER_SIZE];
+	memset(recv_buffer, 0, RECV_BUFFER_SIZE);
+	int bytes_received = 0;
+
+	if(recv(sock_fd, recv_buffer, RECV_BUFFER_SIZE, 0) < 0) {
+		perror("recv failed");
+		close(sock_fd);
+		freeaddrinfo(lookup);
+		exit(EXIT_FAILURE);
+	}
+
+	printf("%s", recv_buffer);
 
 	freeaddrinfo(lookup);
 
@@ -89,7 +119,7 @@ void
 usage ()
 {
 
-	printf("Usage:\n\t04 [DNS name] [port number]\n\n\
-A program to connect to a TCP server\n\n");
+	printf("Usage:\n\t05 [DNS name]\n\n\
+A text-based browser of some sort\n\n");
 	exit(EXIT_FAILURE);
 }

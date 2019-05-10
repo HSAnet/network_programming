@@ -102,7 +102,7 @@ void
 usage ()
 {
 
-	printf("Usage:\n\t03.out [DNS name]\n\n\
+	printf("Usage:\n\t03 [DNS name]\n\n\
 A (trivial) UDP echo client\n\n");
 	exit(EXIT_FAILURE);
 }

@@ -31,6 +31,7 @@ main()
 		exit(EXIT_FAILURE);
 	}
 
+	//wait for keyboard input
 	getchar();
 
 	close(sock_fd);

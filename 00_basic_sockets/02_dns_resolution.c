@@ -6,7 +6,7 @@
  * stdout. There are examples in the getaddrinfo man page at the bottom.
  *
  * Use tcpdump to see what your application sends out.
- * (Hint: use udp port 53 as a filter expression)
+ * (Hint: use "udp port 53" as a filter expression)
  *
  * Learning outcome:
  *    - Get familiar the DNS lookup part of network programming
@@ -104,7 +104,7 @@ void
 usage ()
 {
 
-	printf("Usage:\n\t02.out [DNS name]\n\n\
+	printf("Usage:\n\t02 [DNS name]\n\n\
 A (trivial) program to resolve DNS names\n\n");
 	exit(EXIT_FAILURE);
 }
