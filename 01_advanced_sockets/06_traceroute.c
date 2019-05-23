@@ -124,8 +124,6 @@ main(int argc, char *argv[])
 	ttl_ptr = (int *)CMSG_DATA(send_cmsg);
 	*ttl_ptr = ttl;
 
-	send_msg.msg_controllen = send_cmsg->cmsg_len;
-
 	struct pollfd sockets[1];
 	memset(&sockets, 0, sizeof(sockets));
 
