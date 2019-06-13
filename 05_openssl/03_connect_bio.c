@@ -20,7 +20,7 @@ main(int argc, char *argv[])
 	BIO *stdout_bio = BIO_new_fp(stdout, BIO_NOCLOSE);
 
 	if (!connect_bio || !stdout_bio) {
-		printf("Filed to open one of the BIOs\n");
+		printf("Failed to open one of the BIOs\n");
 		printf("BIO error\n");
 		return EXIT_FAILURE;
 	}
@@ -40,11 +40,12 @@ main(int argc, char *argv[])
 
 	for(int len = 0;;) {
 		len = BIO_read(connect_bio, in_buf, 1024);
+
 		if(len <= 0) {
 			break;
 		}
 
-		BIO_write(stdout_bio, in_buf, len); 
+		BIO_write(stdout_bio, in_buf, len);
 	}
 
 	BIO_flush(stdout_bio);
